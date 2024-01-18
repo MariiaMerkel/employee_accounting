@@ -2,7 +2,7 @@
 Учёт сотрудников
 # Getting started
 ```
-git remote add origin https://https://github.com/MariiaMerkel/employee_accounting.git
+git remote add origin https://github.com/MariiaMerkel/employee_accounting.git
 git branch -M master
 git fetch origin master
 git add .

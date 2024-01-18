@@ -1,6 +1,6 @@
 # employee_accounting
-1 Курсовая работа
-
+Учёт сотрудников
+# Getting started
 ```
 git remote add origin https://https://github.com/MariiaMerkel/employee_accounting.git
 git branch -M master
@@ -17,7 +17,7 @@ git branch --set-upstream-to=origin/main main // чтобы пушить и пу
 git pull
 git push
 ```
-## Badges
+## Функционал
 С помощью этого приложения бухгалтерия и отдел кадров могут узнавать следующую информацию:
 
 1. Список всех сотрудников.

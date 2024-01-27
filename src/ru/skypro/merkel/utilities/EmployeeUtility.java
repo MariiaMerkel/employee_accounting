@@ -2,6 +2,8 @@ package ru.skypro.merkel.utilities;
 
 import ru.skypro.merkel.services.Employee;
 
+import java.util.Arrays;
+
 public class EmployeeUtility {
     private Employee[] employees;
 
@@ -13,10 +15,49 @@ public class EmployeeUtility {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] == null) {
                 employees[i] = employee;
+                System.out.printf("%nСотрудник %s добавлен.%n", employee.getFullName());
                 return;
             }
         }
     }
+
+    public void deleteEmployee(String fullName) {
+        int amountEligible = 0;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null && employees[i].getFullName().equals(fullName)) {
+                amountEligible++;
+            }
+        }
+        if (amountEligible == 1) {
+            for (int i = 0; i < employees.length; i++) {
+                if (employees[i] != null && employees[i].getFullName().equals(fullName)) {
+                    System.out.printf("%nСотрудник %s удалён.%n", employees[i].getFullName());
+                    employees[i] = null;
+                }
+            }
+        } else {
+            System.out.println("\nНайдено несколько сотрудников с такими Ф.И.О. Введите id сотрудника для его удаления");
+        }
+    }
+
+    public void deleteEmployee(int id) {
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null && employees[i].getId() == id) {
+                System.out.printf("Сотрудник %s удалён.%n", employees[i].getFullName());
+                employees[i] = null;
+            }
+        }
+    }
+
+    public void deleteEmployee(String fullName, int id) {
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null  && employees[i].getFullName().equals(fullName) && employees[i].getId() == id) {
+                System.out.printf("Сотрудник %s удалён.%n", employees[i].getFullName());
+                employees[i] = null;
+            }
+        }
+    }
+
 
     public void printAll() {
         System.out.println("\nПолная информация о всех сотрудниках: ");
@@ -99,6 +140,7 @@ public class EmployeeUtility {
                 e.setSalary((int) (percent * e.getSalary()));
             }
         }
+        System.out.println("Зарплата сотрудников проиндексирована.");
     }
 
     public void indexSalary(Employee[] employees, float percent) {
@@ -107,6 +149,7 @@ public class EmployeeUtility {
                 e.setSalary((int) (percent * e.getSalary()));
             }
         }
+        System.out.println("Зарплата сотрудников проиндексирована.");
     }
 
     public void printWithMinSalaryInDepartment(int department) {
@@ -179,6 +222,7 @@ public class EmployeeUtility {
 
     public void indexSalaryInDepartment(int department, float percent) {
         this.indexSalary(findEmployeesOfDepartment(department), percent);
+        System.out.println("Зарплата сотрудников проиндексирована.");
     }
 
     public void printOfDepartment(int department) {

@@ -14,6 +14,7 @@ public class Main {
         employees.addEmployee(new Employee("Пелагейкин Иван Иванович", 3, 160000));
         employees.addEmployee(new Employee("Сёмина Елена Ивановна", 2, 100000));
         employees.addEmployee(new Employee("Ежова Елена Ивановна", 3, 160000));
+        employees.addEmployee(new Employee("Ежова Елена Ивановна", 4, 125000));
 
         employees.printAll();
         employees.printSumMonthlySalary();
@@ -49,5 +50,8 @@ public class Main {
         }
         employees.printBySalaryLess(120000);
         employees.printBySalaryMore(120000);
+
+        employees.deleteEmployee("Ежова Елена Ивановна");
+        employees.deleteEmployee("Ежова Елена Ивановна", 9);
     }
 }

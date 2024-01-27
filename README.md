@@ -2,7 +2,7 @@
 Учёт сотрудников
 # Getting started
 ```
-git remote add origin https://https://github.com/MariiaMerkel/employee_accounting.git
+git remote add origin https://github.com/MariiaMerkel/employee_accounting.git
 git branch -M master
 git fetch origin master
 git add .
@@ -17,7 +17,9 @@ git branch --set-upstream-to=origin/main main // чтобы пушить и пу
 git pull
 git push
 ```
-## Functional
+
+## Функционал
+
 С помощью этого приложения бухгалтерия и отдел кадров могут узнавать следующую информацию:
 
 1. Список всех сотрудников.

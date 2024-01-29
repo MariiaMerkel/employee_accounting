@@ -6,15 +6,15 @@ import ru.skypro.merkel.utilities.EmployeeUtility;
 public class Main {
     public static void main(String[] args) {
         EmployeeUtility employees = new EmployeeUtility(10);
-        employees.addEmployee(new Employee("Харитонов Харитон Харитонович", 1, 100000));
-        employees.addEmployee(new Employee("Иванов Иван Иванович", 1, 120000));
-        employees.addEmployee(new Employee("Петров Иван Иванович", 1, 100000));
-        employees.addEmployee(new Employee("Сидоров Иван Иванович", 5, 140005));
-        employees.addEmployee(new Employee("Иванюк Иван Иванович", 2, 130070));
-        employees.addEmployee(new Employee("Пелагейкин Иван Иванович", 3, 160000));
-        employees.addEmployee(new Employee("Сёмина Елена Ивановна", 2, 100000));
-        employees.addEmployee(new Employee("Ежова Елена Ивановна", 3, 160000));
-        employees.addEmployee(new Employee("Ежова Елена Ивановна", 4, 125000));
+        employees.addEmployee(new Employee("Харитонов", "Харитон", "Харитонович", 1, 100000));
+        employees.addEmployee(new Employee("Иванов", "Иван", "Иванович", 1, 120000));
+        employees.addEmployee(new Employee("Петров", "Иван","Иванович", 1, 100000));
+        employees.addEmployee(new Employee("Сидоров", "Иван","Иванович", 5, 140005));
+        employees.addEmployee(new Employee("Иванюк", "Иван","Иванович", 2, 130070));
+        employees.addEmployee(new Employee("Пелагейкин", "Иван","Иванович", 3, 160000));
+        employees.addEmployee(new Employee("Сёмина", "Елена", "Ивановна", 2, 100000));
+        employees.addEmployee(new Employee("Ежова", "Елена", "Ивановна", 3, 160000));
+        employees.addEmployee(new Employee("Ежова", "Елена", "Ивановна", 4, 125000));
 
         employees.printAll();
         employees.printSumMonthlySalary();
@@ -51,7 +51,7 @@ public class Main {
         employees.printBySalaryLess(120000);
         employees.printBySalaryMore(120000);
 
-        employees.deleteEmployee("Ежова Елена Ивановна");
-        employees.deleteEmployee("Ежова Елена Ивановна", 9);
+        employees.deleteEmployee("Ежова", "Елена", "Ивановна");
+        employees.deleteEmployee(9);
     }
 }

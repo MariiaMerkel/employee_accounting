@@ -5,7 +5,7 @@ import ru.skypro.merkel.services.Employee;
 import java.util.Arrays;
 
 public class EmployeeUtility {
-    private Employee[] employees;
+    private final Employee[] employees;
 
     public EmployeeUtility(int amount) {
         this.employees = new Employee[amount];
@@ -15,23 +15,29 @@ public class EmployeeUtility {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] == null) {
                 employees[i] = employee;
-                System.out.printf("%nСотрудник %s добавлен.%n", employee.getFullName());
+                System.out.printf("%nСотрудник %s %s %s добавлен.%n", employee.getFirstName(), employee.getSecondName(), employee.getLastName());
                 return;
             }
         }
     }
 
-    public void deleteEmployee(String fullName) {
+    public void deleteEmployee(String firstName, String secondName, String lastName) {
         int amountEligible = 0;
         for (int i = 0; i < employees.length; i++) {
-            if (employees[i] != null && employees[i].getFullName().equals(fullName)) {
+            if (employees[i] != null &&
+                    employees[i].getFirstName().equals(firstName) &&
+                    employees[i].getSecondName().equals(secondName) &&
+                    employees[i].getLastName().equals(lastName)) {
                 amountEligible++;
             }
         }
         if (amountEligible == 1) {
             for (int i = 0; i < employees.length; i++) {
-                if (employees[i] != null && employees[i].getFullName().equals(fullName)) {
-                    System.out.printf("%nСотрудник %s удалён.%n", employees[i].getFullName());
+                if (employees[i] != null &&
+                        employees[i].getFirstName().equals(firstName) &&
+                        employees[i].getSecondName().equals(secondName) &&
+                        employees[i].getLastName().equals(lastName)) {
+                    System.out.printf("%nСотрудник %s %s %s удалён.%n", employees[i].getFirstName(), employees[i].getSecondName(), employees[i].getLastName());
                     employees[i] = null;
                 }
             }
@@ -43,21 +49,11 @@ public class EmployeeUtility {
     public void deleteEmployee(int id) {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] != null && employees[i].getId() == id) {
-                System.out.printf("Сотрудник %s удалён.%n", employees[i].getFullName());
+                System.out.printf("Сотрудник %s %s %s удалён.%n", employees[i].getFirstName(), employees[i].getSecondName(), employees[i].getLastName());
                 employees[i] = null;
             }
         }
     }
-
-    public void deleteEmployee(String fullName, int id) {
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i] != null  && employees[i].getFullName().equals(fullName) && employees[i].getId() == id) {
-                System.out.printf("Сотрудник %s удалён.%n", employees[i].getFullName());
-                employees[i] = null;
-            }
-        }
-    }
-
 
     public void printAll() {
         System.out.println("\nПолная информация о всех сотрудниках: ");
@@ -129,7 +125,7 @@ public class EmployeeUtility {
         System.out.println("\nФ.И.О. всех сотрудников: ");
         for (Employee e : employees) {
             if (e != null) {
-                System.out.println("    " + e.getFullName());
+                System.out.printf("    %s %s %s" , e.getFirstName(), e.getSecondName(), e.getLastName());
             }
         }
     }
@@ -254,7 +250,7 @@ public class EmployeeUtility {
 
     public void printIdFullNameSalary(Employee e) {
         if (e != null) {
-            System.out.printf("    %d. ФИО сотрудника: %s, зарплата: %d рублей.%n", e.getId(), e.getFullName(), e.getSalary());
+            System.out.printf("    %d. ФИО сотрудника: %s %s %s, зарплата: %d рублей.%n", e.getId(), e.getFirstName(), e.getSecondName(), e.getLastName(), e.getSalary());
         }
     }
 }

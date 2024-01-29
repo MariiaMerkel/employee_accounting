@@ -15,6 +15,9 @@ public class Main {
         employees.addEmployee(new Employee("Сёмина", "Елена", "Ивановна", 2, 100000));
         employees.addEmployee(new Employee("Ежова", "Елена", "Ивановна", 3, 160000));
         employees.addEmployee(new Employee("Ежова", "Елена", "Ивановна", 4, 125000));
+        employees.addEmployee(new Employee("Ежова", "Алена", "Ивановна", 4, 125000));
+        employees.addEmployee(new Employee("Ежова", "Юлия", "Ивановна", 4, 125000));
+        employees.addEmployee(new Employee("Ежова", "Любовь", "Ивановна", 4, 125000));
 
         employees.printAll();
         employees.printSumMonthlySalary();

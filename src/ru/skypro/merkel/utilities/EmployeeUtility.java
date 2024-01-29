@@ -2,8 +2,6 @@ package ru.skypro.merkel.utilities;
 
 import ru.skypro.merkel.services.Employee;
 
-import java.util.Arrays;
-
 public class EmployeeUtility {
     private final Employee[] employees;
 
@@ -11,14 +9,15 @@ public class EmployeeUtility {
         this.employees = new Employee[amount];
     }
 
-    public void addEmployee(Employee employee) {
+    public void addEmployee(Employee e) {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] == null) {
-                employees[i] = employee;
-                System.out.printf("%nСотрудник %s %s %s добавлен.%n", employee.getFirstName(), employee.getSecondName(), employee.getLastName());
+                employees[i] = e;
+                System.out.printf("%nСотрудник %s добавлен.%n", getFullName(e));
                 return;
             }
         }
+        System.out.printf("%nДанные о сотруднике %s не добавлены, так как массив переполнен%n", getFullName(e));
     }
 
     public void deleteEmployee(String firstName, String secondName, String lastName) {
@@ -37,7 +36,7 @@ public class EmployeeUtility {
                         employees[i].getFirstName().equals(firstName) &&
                         employees[i].getSecondName().equals(secondName) &&
                         employees[i].getLastName().equals(lastName)) {
-                    System.out.printf("%nСотрудник %s %s %s удалён.%n", employees[i].getFirstName(), employees[i].getSecondName(), employees[i].getLastName());
+                    System.out.printf("%nСотрудник %s удалён.%n", getFullName(employees[i]));
                     employees[i] = null;
                 }
             }
@@ -49,7 +48,7 @@ public class EmployeeUtility {
     public void deleteEmployee(int id) {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] != null && employees[i].getId() == id) {
-                System.out.printf("Сотрудник %s %s %s удалён.%n", employees[i].getFirstName(), employees[i].getSecondName(), employees[i].getLastName());
+                System.out.printf("Сотрудник %s удалён.%n", getFullName(employees[i]));
                 employees[i] = null;
             }
         }
@@ -179,7 +178,7 @@ public class EmployeeUtility {
         System.out.println("\nФ.И.О. всех сотрудников: ");
         for (Employee e : employees) {
             if (e != null) {
-                System.out.printf("    %s %s %s" , e.getFirstName(), e.getSecondName(), e.getLastName());
+                System.out.printf("    %s" , getFullName(e));
             }
         }
     }
@@ -304,7 +303,11 @@ public class EmployeeUtility {
 
     public void printIdFullNameSalary(Employee e) {
         if (e != null) {
-            System.out.printf("    %d. ФИО сотрудника: %s %s %s, зарплата: %d рублей.%n", e.getId(), e.getFirstName(), e.getSecondName(), e.getLastName(), e.getSalary());
+            System.out.printf("    %d. ФИО сотрудника: %s, зарплата: %d рублей.%n", getFullName(e), e.getSalary());
         }
+    }
+
+    public String getFullName(Employee e) {
+        return String.format("%s %s %s", e.getFirstName(), e.getSecondName(), e.getLastName());
     }
 }

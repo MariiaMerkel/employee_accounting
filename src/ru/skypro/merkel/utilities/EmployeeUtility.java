@@ -55,6 +55,60 @@ public class EmployeeUtility {
         }
     }
 
+    public int findEmployeeByFullName(String firstName, String secondName, String lastName) {
+        int amountEligible = 0;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null &&
+                    employees[i].getFirstName().equals(firstName) &&
+                    employees[i].getSecondName().equals(secondName) &&
+                    employees[i].getLastName().equals(lastName)) {
+                amountEligible++;
+            }
+        }
+        if (amountEligible == 1) {
+            for (int i = 0; i < employees.length; i++) {
+                if (employees[i] != null &&
+                        employees[i].getFirstName().equals(firstName) &&
+                        employees[i].getSecondName().equals(secondName) &&
+                        employees[i].getLastName().equals(lastName)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public void updateSalaryById(int id, int newSalary) {
+        try {
+            employees[id].setSalary(newSalary);
+        } catch (RuntimeException e) {
+            System.out.println("\nСотрудник с таким id не найден.");
+        }
+    }
+
+    public void updateDepartmentById(int id, int newDepartment) {
+        try {
+            employees[id].setDepartment(newDepartment);
+        } catch (RuntimeException e) {
+            System.out.println("\nСотрудник с таким id не найден.");
+        }
+    }
+
+    public void updateSalaryByFullName(String firstName, String secondName, String lastName, int newSalary) {
+        if (findEmployeeByFullName(firstName, secondName, lastName) != -1) {
+            employees[findEmployeeByFullName(firstName, secondName, lastName)].setSalary(newSalary);
+        } else {
+            System.out.println("\nНайдено несколько сотрудников с такими Ф.И.О. Введите id сотрудника.");
+        }
+    }
+
+    public void updateDepartmentByFullName(String firstName, String secondName, String lastName, int newDepartment) {
+        if (findEmployeeByFullName(firstName, secondName, lastName) != -1) {
+            employees[findEmployeeByFullName(firstName, secondName, lastName)].setDepartment(newDepartment);
+        } else {
+            System.out.println("\nНайдено несколько сотрудников с такими Ф.И.О. Введите id сотрудника.");
+        }
+    }
     public void printAll() {
         System.out.println("\nПолная информация о всех сотрудниках: ");
         for (Employee e : employees) {

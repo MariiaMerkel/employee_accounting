@@ -1,21 +1,36 @@
 package ru.skypro.merkel.services;
 
+import java.text.NumberFormat;
+
 public class Employee {
-    private final String fullName;
+    private final String firstName;
+    private final String secondName;
+    private final String lastName;
     private int department;
     private int salary;
     private final int id;
     private static int counter = 1;
+    private final NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
 
-    public Employee(String fullName, int department, int salary) {
-        this.fullName = fullName;
+    public Employee(String firstName, String secondName,String lastName,int department, int salary) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
         this.department = department;
         this.salary = salary;
         this.id = getCounter();
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public int getDepartment() {
@@ -37,6 +52,9 @@ public class Employee {
     public static int getCounter() {
         return counter++;
     }
+    public String getFullName() {
+        return String.format("%s %s %s", this.getFirstName(), this.getSecondName(), this.getLastName());
+    }
 
     public int getId() {
         return id;
@@ -44,6 +62,6 @@ public class Employee {
 
     @Override
     public String toString() {
-        return String.format("%d. ФИО сотрудника: %s, отдел: %d, зарплата: %d рублей.", id, fullName, department, salary);
+        return String.format("%d. ФИО сотрудника: %s, отдел: %d, зарплата: %s.", id, getFullName(), department, numberFormat.format(salary));
     }
 }

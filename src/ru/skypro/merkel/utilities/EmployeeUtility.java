@@ -2,25 +2,28 @@ package ru.skypro.merkel.utilities;
 
 import ru.skypro.merkel.services.Employee;
 
+import java.text.NumberFormat;
+
 public class EmployeeUtility {
     private final Employee[] employees;
+    private final NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
 
     public EmployeeUtility(int amount) {
         this.employees = new Employee[amount];
     }
 
-    public void addEmployee(Employee e) {
+    public void add(Employee e) {
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] == null) {
                 employees[i] = e;
-                System.out.printf("%nСотрудник %s добавлен.%n", getFullName(e));
+                System.out.printf("%nСотрудник %s добавлен.%n", e.getFullName());
                 return;
             }
         }
-        System.out.printf("%nДанные о сотруднике %s не добавлены, так как массив переполнен%n", getFullName(e));
+        System.out.printf("%nДанные о сотруднике %s не добавлены, так как массив переполнен%n", e.getFullName());
     }
 
-    public void deleteEmployee(String firstName, String secondName, String lastName) {
+    public void delete(String firstName, String secondName, String lastName) {
         int amountEligible = 0;
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] != null &&
@@ -36,7 +39,7 @@ public class EmployeeUtility {
                         employees[i].getFirstName().equals(firstName) &&
                         employees[i].getSecondName().equals(secondName) &&
                         employees[i].getLastName().equals(lastName)) {
-                    System.out.printf("%nСотрудник %s удалён.%n", getFullName(employees[i]));
+                    System.out.printf("%nСотрудник %s удалён.%n", employees[i].getFullName());
                     employees[i] = null;
                 }
             }
@@ -45,69 +48,32 @@ public class EmployeeUtility {
         }
     }
 
-    public void deleteEmployee(int id) {
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i] != null && employees[i].getId() == id) {
-                System.out.printf("Сотрудник %s удалён.%n", getFullName(employees[i]));
-                employees[i] = null;
-            }
+    public void delete(int id) {
+        if (id <= employees.length && employees[id] != null) {
+            System.out.printf("Сотрудник %s удалён.%n", employees[id].getFullName());
+            employees[id] = null;
+        } else {
+            System.out.println("\nСотрудник с такими id не найден.");
         }
     }
 
-    public int findEmployeeByFullName(String firstName, String secondName, String lastName) {
+    public Employee findEmployeeByFullName(String fullName) {
         int amountEligible = 0;
         for (int i = 0; i < employees.length; i++) {
-            if (employees[i] != null &&
-                    employees[i].getFirstName().equals(firstName) &&
-                    employees[i].getSecondName().equals(secondName) &&
-                    employees[i].getLastName().equals(lastName)) {
+            if (employees[i] != null && employees[i].getFullName().equals(fullName)) {
                 amountEligible++;
             }
         }
         if (amountEligible == 1) {
             for (int i = 0; i < employees.length; i++) {
-                if (employees[i] != null &&
-                        employees[i].getFirstName().equals(firstName) &&
-                        employees[i].getSecondName().equals(secondName) &&
-                        employees[i].getLastName().equals(lastName)) {
-                    return i;
+                if (employees[i] != null && employees[i].getFullName().equals(fullName)) {
+                    return employees[i];
                 }
             }
         }
-        return -1;
+        return null;
     }
 
-    public void updateSalaryById(int id, int newSalary) {
-        try {
-            employees[id].setSalary(newSalary);
-        } catch (RuntimeException e) {
-            System.out.println("\nСотрудник с таким id не найден.");
-        }
-    }
-
-    public void updateDepartmentById(int id, int newDepartment) {
-        try {
-            employees[id].setDepartment(newDepartment);
-        } catch (RuntimeException e) {
-            System.out.println("\nСотрудник с таким id не найден.");
-        }
-    }
-
-    public void updateSalaryByFullName(String firstName, String secondName, String lastName, int newSalary) {
-        if (findEmployeeByFullName(firstName, secondName, lastName) != -1) {
-            employees[findEmployeeByFullName(firstName, secondName, lastName)].setSalary(newSalary);
-        } else {
-            System.out.println("\nНайдено несколько сотрудников с такими Ф.И.О. Введите id сотрудника.");
-        }
-    }
-
-    public void updateDepartmentByFullName(String firstName, String secondName, String lastName, int newDepartment) {
-        if (findEmployeeByFullName(firstName, secondName, lastName) != -1) {
-            employees[findEmployeeByFullName(firstName, secondName, lastName)].setDepartment(newDepartment);
-        } else {
-            System.out.println("\nНайдено несколько сотрудников с такими Ф.И.О. Введите id сотрудника.");
-        }
-    }
     public void printAll() {
         System.out.println("\nПолная информация о всех сотрудниках: ");
         for (Employee e : employees) {
@@ -128,16 +94,21 @@ public class EmployeeUtility {
     }
 
     public void printSumMonthlySalary() {
-        System.out.printf("%nСумма затрат на зарплаты всех сотрудников в месяц = %d рублей.%n", calculateSumMonthlySalary(employees));
+        System.out.printf("%nСумма затрат на зарплаты всех сотрудников в месяц = %s.%n", numberFormat.format(calculateSumMonthlySalary(employees)));
     }
 
-    public void printWithMinSalary() {
+    public Employee findByMinSalary() {
         Employee employeeWithMinSalary = employees[0];
         for (Employee e : employees) {
             if (e != null && employeeWithMinSalary.getSalary() > e.getSalary()) {
                 employeeWithMinSalary = e;
             }
         }
+        return employeeWithMinSalary;
+    }
+
+    public void printWithMinSalary() {
+        Employee employeeWithMinSalary = findByMinSalary();
         System.out.println("\nСотрудники с наименьшей зарплатой: ");
         for (Employee e : employees) {
             if (e != null && e.getSalary() == employeeWithMinSalary.getSalary()) {
@@ -146,13 +117,18 @@ public class EmployeeUtility {
         }
     }
 
-    public void printWithMaxSalary() {
+    public Employee findByMaxSalary() {
         Employee employeeWithMaxSalary = employees[0];
         for (Employee e : employees) {
             if (e != null && employeeWithMaxSalary.getSalary() < e.getSalary()) {
                 employeeWithMaxSalary = e;
             }
         }
+        return employeeWithMaxSalary;
+    }
+
+    public void printWithMaxSalary() {
+        Employee employeeWithMaxSalary = findByMaxSalary();
         System.out.println("\nСотрудники с наибольшей зарплатой: ");
         for (Employee e : employees) {
             if (e != null && e.getSalary() == employeeWithMaxSalary.getSalary()) {
@@ -162,23 +138,32 @@ public class EmployeeUtility {
     }
 
     public void printAverageSalary() {
+        System.out.printf("%nСреднее значение зарплат = %s .%n", numberFormat.format(calculateAverageSalary()));
+    }
+
+    public float calculateAverageSalary() {
         int sum = calculateSumMonthlySalary(employees);
+        if (calculateEmployees() != 0) {
+            return (float) sum / calculateEmployees();
+        }
+        return 0f;
+    }
+
+    public int calculateEmployees() {
         int c = 0;
         for (Employee e : employees) {
             if (e != null) {
                 c++;
             }
         }
-        if (c != 0) {
-            System.out.printf("%nСреднее значение зарплат = %.2f рублей.%n", (float) sum / c);
-        }
+        return c;
     }
 
     public void printFullNameAll() {
         System.out.println("\nФ.И.О. всех сотрудников: ");
         for (Employee e : employees) {
             if (e != null) {
-                System.out.printf("    %s" , getFullName(e));
+                System.out.printf("    %s%n", e.getFullName());
             }
         }
     }
@@ -189,7 +174,7 @@ public class EmployeeUtility {
                 e.setSalary((int) (percent * e.getSalary()));
             }
         }
-        System.out.println("Зарплата сотрудников проиндексирована.");
+        System.out.println("\nЗарплата сотрудников проиндексирована.");
     }
 
     public void indexSalary(Employee[] employees, float percent) {
@@ -198,20 +183,59 @@ public class EmployeeUtility {
                 e.setSalary((int) (percent * e.getSalary()));
             }
         }
-        System.out.println("Зарплата сотрудников проиндексирована.");
+        System.out.println("\nЗарплата сотрудников проиндексирована.");
+    }
+
+    public void updateSalaryById(int id, int newSalary) {
+        if (id < this.employees.length) {
+            System.out.printf("%nЗарплата сотрудника %s изменена с %s на %s.%n", employees[id].getFullName(), numberFormat.format(employees[id].getSalary()), numberFormat.format(newSalary));
+            employees[id].setSalary(newSalary);
+        } else {
+            System.out.println("\nСотрудник с таким id не найден.");
+        }
+    }
+
+    public void updateDepartmentById(int id, int newDepartment) {
+        if (id < employees.length) {
+            System.out.printf("%nОтдел сотрудника %s изменена с %d на %d.%n", employees[id].getFullName(), employees[id].getDepartment(), newDepartment);
+            employees[id].setDepartment(newDepartment);
+        } else {
+            System.out.println("\nСотрудник с таким id не найден.");
+        }
+    }
+
+    public void updateSalaryByFullName(String fullName, int newSalary) {
+        Employee e = findEmployeeByFullName(fullName);
+        if (e != null) {
+            System.out.printf("%nЗарплата сотрудника %s изменена с %s на %s%n", e.getFullName(), numberFormat.format(e.getSalary()), numberFormat.format(newSalary));
+            e.setSalary(newSalary);
+        } else {
+            System.out.println("\nСотрудников с такими Ф.И.О. не найдено или найдено несколько. Введите id сотрудника.");
+        }
+    }
+
+    public void updateDepartmentByFullName(String fullName, int newDepartment) {
+        Employee e = findEmployeeByFullName(fullName);
+        if (e != null) {
+            System.out.printf("%nОтдел сотрудника %s изменена с %d на %d%n", e.getFullName(), e.getDepartment(), newDepartment);
+            e.setDepartment(newDepartment);
+        } else {
+            System.out.println("\nСотрудников с такими Ф.И.О. не найдено или найдено несколько. Введите id сотрудника.");
+        }
     }
 
     public void printWithMinSalaryInDepartment(int department) {
-        if (findEmployeesOfDepartment(department)[0] != null) {
-            Employee employeeWithMinSalary = findEmployeesOfDepartment(department)[0];
-            for (Employee e : employees) {
-                if (e != null && employeeWithMinSalary.getSalary() > e.getSalary() && e.getDepartment() == department) {
+        Employee[] employeesDep = findEmployeesOfDepartment(department);
+        if (employeesDep.length != 0) {
+            Employee employeeWithMinSalary = employeesDep[0];
+            for (Employee e : employeesDep) {
+                if (employeeWithMinSalary.getSalary() > e.getSalary()) {
                     employeeWithMinSalary = e;
                 }
             }
             System.out.printf("%nСотрудники с наименьшей зарплатой отдела № %d:%n", department);
-            for (Employee e : employees) {
-                if (e != null && e.getSalary() == employeeWithMinSalary.getSalary() && e.getDepartment() == department) {
+            for (Employee e : employeesDep) {
+                if (e != null && e.getSalary() == employeeWithMinSalary.getSalary()) {
                     System.out.println("    " + e);
                 }
             }
@@ -219,16 +243,17 @@ public class EmployeeUtility {
     }
 
     public void printWithMaxSalaryInDepartment(int department) {
-        if (findEmployeesOfDepartment(department)[0] != null) {
-            Employee employeeWithMaxSalary = findEmployeesOfDepartment(department)[0];
-            for (Employee e : employees) {
-                if (e != null && employeeWithMaxSalary.getSalary() < e.getSalary() && e.getDepartment() == department) {
+        Employee[] employeesDep = findEmployeesOfDepartment(department);
+        if (employeesDep.length != 0) {
+            Employee employeeWithMaxSalary = employeesDep[0];
+            for (Employee e : employeesDep) {
+                if (employeeWithMaxSalary.getSalary() < e.getSalary()) {
                     employeeWithMaxSalary = e;
                 }
             }
             System.out.printf("%nСотрудники с наибольшей зарплатой отдела № %d:%n", department);
-            for (Employee e : employees) {
-                if (e != null && e.getSalary() == employeeWithMaxSalary.getSalary() && e.getDepartment() == department) {
+            for (Employee e : employeesDep) {
+                if (e.getSalary() == employeeWithMaxSalary.getSalary()) {
                     System.out.println("    " + e);
                 }
             }
@@ -236,11 +261,17 @@ public class EmployeeUtility {
     }
 
     public void printSumMonthlySalaryInDepartment(int department) {
-        System.out.printf("%nСумма затрат на зарплаты в отделе № %d за месяц = %d рублей.%n", department, calculateSumMonthlySalary(findEmployeesOfDepartment(department)));
+        System.out.printf("%nСумма затрат на зарплаты в отделе № %d за месяц = %s.%n", department, numberFormat.format(calculateSumMonthlySalary(findEmployeesOfDepartment(department))));
     }
 
     public Employee[] findEmployeesOfDepartment(int department) {
-        Employee[] employeesOfDepartment = new Employee[employees.length];
+        int c = 0;
+        for (Employee e : employees) {
+            if (e != null && e.getDepartment() == department) {
+                c++;
+            }
+        }
+        Employee[] employeesOfDepartment = new Employee[c];
         int i = 0;
         for (Employee e : employees) {
             if (e != null && e.getDepartment() == department) {
@@ -251,40 +282,26 @@ public class EmployeeUtility {
     }
 
     public void printAverageSalaryInDepartment(int department) {
-        int c = 0;
-        for (Employee e : employees) {
-            if (e != null && e.getDepartment() == department) {
-                c++;
-            }
-        }
-
-        Employee[] employeesOfDepartment = new Employee[employees.length];
-        int i = 0;
-        for (Employee e : employees) {
-            if (e != null && e.getDepartment() == department) {
-                employeesOfDepartment[i++] = e;
-            }
-        }
+        Employee[] employeesOfDepartment = findEmployeesOfDepartment(department);
         int sum = calculateSumMonthlySalary(employeesOfDepartment);
-        System.out.printf("%nСреднее значение зарплат отдела № %d = %.2f рублей.%n", department, (float) sum / c);
+        System.out.printf("%nСреднее значение зарплат отдела № %d = %s.%n", department, numberFormat.format((float) sum / employeesOfDepartment.length));
     }
 
     public void indexSalaryInDepartment(int department, float percent) {
         this.indexSalary(findEmployeesOfDepartment(department), percent);
-        System.out.println("Зарплата сотрудников проиндексирована.");
+        System.out.printf("%nЗарплата сотрудников отдела №%d проиндексирована.%n", department);
     }
 
     public void printOfDepartment(int department) {
+        Employee[] employeesDep = findEmployeesOfDepartment(department);
         System.out.printf("%nСотрудники отдела № %d:%n", department);
-        for (Employee e : employees) {
-            if (e != null && e.getDepartment() == department) {
-                printIdFullNameSalary(e);
-            }
+        for (Employee e : employeesDep) {
+            printIdFullNameSalary(e);
         }
     }
 
     public void printBySalaryLess(int limit) {
-        System.out.printf("%nСотрудники с зарплатой меньше %d рублей:%n", limit);
+        System.out.printf("%nСотрудники с зарплатой меньше %s:%n", numberFormat.format(limit));
         for (Employee e : employees) {
             if (e != null && e.getSalary() <= limit) {
                 printIdFullNameSalary(e);
@@ -293,7 +310,7 @@ public class EmployeeUtility {
     }
 
     public void printBySalaryMore(int limit) {
-        System.out.printf("%nСотрудники с зарплатой больше %d рублей:%n", limit);
+        System.out.printf("%nСотрудники с зарплатой больше %s:%n", numberFormat.format(limit));
         for (Employee e : employees) {
             if (e != null && e.getSalary() >= limit) {
                 printIdFullNameSalary(e);
@@ -303,11 +320,8 @@ public class EmployeeUtility {
 
     public void printIdFullNameSalary(Employee e) {
         if (e != null) {
-            System.out.printf("    %d. ФИО сотрудника: %s, зарплата: %d рублей.%n", getFullName(e), e.getSalary());
+            System.out.printf("    %d. ФИО сотрудника: %s, зарплата: %s.%n", e.getId(), e.getFullName(), numberFormat.format(e.getSalary()));
         }
     }
 
-    public String getFullName(Employee e) {
-        return String.format("%s %s %s", e.getFirstName(), e.getSecondName(), e.getLastName());
-    }
 }

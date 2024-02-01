@@ -1,5 +1,7 @@
 package ru.skypro.merkel.services;
 
+import java.text.NumberFormat;
+
 public class Employee {
     private final String firstName;
     private final String secondName;
@@ -8,6 +10,7 @@ public class Employee {
     private int salary;
     private final int id;
     private static int counter = 1;
+    private final NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
 
     public Employee(String firstName, String secondName,String lastName,int department, int salary) {
         this.firstName = firstName;
@@ -49,6 +52,9 @@ public class Employee {
     public static int getCounter() {
         return counter++;
     }
+    public String getFullName() {
+        return String.format("%s %s %s", this.getFirstName(), this.getSecondName(), this.getLastName());
+    }
 
     public int getId() {
         return id;
@@ -56,6 +62,6 @@ public class Employee {
 
     @Override
     public String toString() {
-        return String.format("%d. ФИО сотрудника: %s %s %s, отдел: %d, зарплата: %d рублей.", id, firstName, secondName, lastName, department, salary);
+        return String.format("%d. ФИО сотрудника: %s, отдел: %d, зарплата: %s.", id, getFullName(), department, numberFormat.format(salary));
     }
 }
